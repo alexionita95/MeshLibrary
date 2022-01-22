@@ -16,6 +16,7 @@ public:
 	virtual void Stop() = 0;
 	virtual void onDisconnected(const std::function<void()>& callback) = 0;
 	virtual void onData(const std::function<void(const CommunicationMessageHandle&)>& callback) = 0;
+	virtual ~CommunicationClient() = default;
 };
 using CommunicationClientHandle = std::shared_ptr<CommunicationClient>;
 #endif

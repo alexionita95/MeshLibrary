@@ -1,11 +1,12 @@
 #include<Node.h>
 
-Node::Node() :connection{ nullptr }, server{ nullptr }, id{ 0 }, isServer{ false }, isRoot{ false }
+Node::Node() :connection{ nullptr }, server{ nullptr }, id{ 0 }, isRoot{ false }
 {
 
 }
 
-Node::Node(const CommunicationClientHandle& conn) : connection{ conn }, server{ nullptr }, id{ 0 }, isServer{ false }, isRoot{ false }
+
+Node::Node(const CommunicationClientHandle& conn) : connection{ conn }, server{ nullptr }, id{ 0 }, isRoot{ false }
 {
 	connection->onData([this](const CommunicationMessageHandle& message)
 		{
@@ -21,6 +22,30 @@ Node::Node(const CommunicationClientHandle& conn) : connection{ conn }, server{ 
 		}
 		});
 
+
+}
+
+bool Node::HasClient(const std::shared_ptr<Node>& client)
+{
+	for (const auto& c : clients)
+	{
+		if (c->id == client->id)
+			return true;
+	}
+	return false;
+}
+
+void Node::Broadcast(const CommunicationMessageHandle& message)
+{
+	connection->Send(message);
+
+	for (const auto& client : clients)
+	{
+		if (client->GetId() != message->GetSender())
+		{
+			client->Broadcast(message);
+		}
+	}
 
 }
 
