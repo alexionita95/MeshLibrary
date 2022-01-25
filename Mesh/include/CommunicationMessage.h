@@ -1,6 +1,8 @@
 #ifndef COMMUNICATION_MESSAGE_H
 #define COMMUNICATION_MESSAGE_H
 
+#include<memory>
+
 class CommunicationMessage
 {
 public:

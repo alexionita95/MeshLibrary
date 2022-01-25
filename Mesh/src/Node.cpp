@@ -6,7 +6,7 @@ Node::Node() :connection{ nullptr }, server{ nullptr }, id{ 0 }, isRoot{ false }
 }
 
 
-Node::Node(const CommunicationClientHandle& conn) : connection{ conn }, server{ nullptr }, id{ 0 }, isRoot{ false }
+void Node::StartClient(const CommunicationClientHandle& conn)
 {
 	connection->onData([this](const CommunicationMessageHandle& message)
 		{
@@ -60,14 +60,15 @@ void Node::AddClient(const NodeHandle& client)
 void Node::StartServer(const CommunicationServerHandle& srv)
 {
 	server->onNewConnection([this](const CommunicationClientHandle& c) {
-		NodeHandle newNode = std::make_shared<Node>(c);
+		NodeHandle newNode = std::make_shared<Node>();
+		newNode->StartClient(c);
 		AddClient(newNode);
 		newNode->onDisconnected([this,newNode]() {
 
-			std::remove_if(clients.begin(), clients.end(), [newNode]
+			clients.erase(std::remove_if(clients.begin(), clients.end(), [newNode]
 			(const NodeHandle& client) {
 					return client->GetId() == newNode->GetId();
-				});
+				}));
 
 			if (clientDsconnectedCallback)
 			{
@@ -120,7 +121,7 @@ void Node::onDisconnected(const std::function<void()>& callback)
 {
 	disconnectedCallback = callback;
 }
-void Node::onClientData(std::function<void(const std::shared_ptr<Node>&, const CommunicationMessageHandle&)>& callback)
+void Node::onClientData(const std::function<void(const std::shared_ptr<Node>&, const CommunicationMessageHandle&)>& callback)
 {
 	clientDataCallback = callback;
 }

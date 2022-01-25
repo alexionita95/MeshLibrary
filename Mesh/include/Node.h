@@ -12,7 +12,6 @@ class Node
 {
 public:
 	Node();
-	Node(const CommunicationClientHandle& conn);
 	void AddClient(const std::shared_ptr<Node>& client);
 
 	uint32_t GetId()
@@ -22,11 +21,12 @@ public:
 	bool HasClient(const std::shared_ptr<Node>& client);
 	void Broadcast(const CommunicationMessageHandle& message);
 	void StartServer(const CommunicationServerHandle& srv);
+	void StartClient(const CommunicationClientHandle& client);
 	void Update();
 
 	void onNewConnection(const std::function<void(const std::shared_ptr<Node>&)>& callback);
 	void onClientDisconnected(const std::function<void(const std::shared_ptr<Node>&)>& callback);
-	void onClientData(std::function<void(const std::shared_ptr<Node>&, const CommunicationMessageHandle&)>& callback);
+	void onClientData(const std::function<void(const std::shared_ptr<Node>&, const CommunicationMessageHandle&)>& callback);
 	void onData(const std::function<void(const CommunicationMessageHandle&)>& callback);
 	void onDisconnected(const std::function<void()>& callback);
 
