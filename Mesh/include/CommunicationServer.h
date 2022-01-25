@@ -14,6 +14,7 @@ public:
 	virtual void Send(const CommunicationMessageHandle& message) = 0;
 	virtual bool Start(const std::string& ip, const uint32_t port) = 0;
 	virtual void Stop() = 0;
+	virtual void Update() = 0;
 	virtual void onNewConnection(const std::function<void(const CommunicationClientHandle&)>& callback) = 0;
 	virtual ~CommunicationServer() = default;
 };

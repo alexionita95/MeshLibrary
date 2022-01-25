@@ -22,6 +22,7 @@ public:
 	bool HasClient(const std::shared_ptr<Node>& client);
 	void Broadcast(const CommunicationMessageHandle& message);
 	void StartServer(const CommunicationServerHandle& srv);
+	void Update();
 
 	void onNewConnection(const std::function<void(const std::shared_ptr<Node>&)>& callback);
 	void onClientDisconnected(const std::function<void(const std::shared_ptr<Node>&)>& callback);

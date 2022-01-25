@@ -91,6 +91,22 @@ void Node::StartServer(const CommunicationServerHandle& srv)
 		});
 }
 
+void Node::Update()
+{
+	if (server != nullptr)
+	{
+		server->Update();
+	}
+	if (connection != nullptr)
+	{
+		connection->Update();
+	}
+	for (const auto& client : clients)
+	{
+		client->Update();
+	}
+}
+
 
 void Node::onNewConnection(const std::function<void(const std::shared_ptr<Node>&)>& callback)
 {
